@@ -51,73 +51,15 @@ the database, your query performance should be lightning fast!
 
 # For the data_path argument, include the full file path to the folder that holds the data!
 # The schema is set for every table (other than rosters) to prevent mismatched type issues within columns
-def readDataSubset(table_type, data_path="C:\\Users\\username\\file-path\\SMT-Data-Challenge-2025"):
+def readDataSubset(table_type, data_path="/Users/gaberiedel/baseball_projects/SMT-Data-Challenge-2025-Updated"):
     if table_type not in ['ball_pos', 'game_events', 'game_info', 'player_pos', 'rosters']:
         #print("Invalid data subset name. Please try again with a valid data subset.")
         return -1
     
     if table_type == 'rosters':
         return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, 'rosters.csv'), format = 'csv')
-    elif table_type == 'game_events':
-        schema = pa.schema([("game_str", pa.string()),
-                            ("play_id", pa.string()),
-                            ("at_bat", pa.string()),
-                            ("play_per_game", pa.string()),
-                            ("timestamp", pa.float32()),
-                            ("player_position", pa.string()),
-                            ("event_code", pa.string()),
-                            ("home_team", pa.string()),
-                            ("away_team", pa.string()),
-                            ("year", pa.string()),
-                            ("day", pa.string())])
-        return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, table_type), format = 'csv', partitioning = ['home_team', 'away_team', 'year', 'day'], schema=schema)
-    elif table_type == 'game_info':
-        schema = pa.schema([("game_str", pa.string()),
-                            ("home_team", pa.string()),
-                            ("away_team", pa.string()),
-                            ("at_bat", pa.string()),
-                            ("play_per_game", pa.string()),
-                            ("top_bottom_inning", pa.string()),
-                            ("pitcher", pa.string()),
-                            ("catcher", pa.string()),
-                            ("first_base", pa.string()),
-                            ("second_base", pa.string()),
-                            ("third_base", pa.string()),
-                            ("shortstop", pa.string()),
-                            ("left_field", pa.string()),
-                            ("center_field", pa.string()),
-                            ("right_field", pa.string()),
-                            ("batter", pa.string()),
-                            ("first_baserunner", pa.string()),
-                            ("second_baserunner", pa.string()),
-                            ("third_baserunner", pa.string()),
-                            ("year", pa.string()),
-                            ("day", pa.string())])
-        return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, table_type), format = 'csv', partitioning = ['home_team', 'away_team', 'year', 'day'], schema=schema)
-    elif table_type == 'ball_pos':
-        schema = pa.schema([("game_str", pa.string()),
-                            ("play_id", pa.string()),
-                            ("timestamp", pa.float32()),
-                            ("ball_position_x", pa.float32()),
-                            ("ball_position_y", pa.float32()),
-                            ("ball_position_z", pa.float32()),
-                            ("home_team", pa.string()),
-                            ("away_team", pa.string()),
-                            ("year", pa.string()),
-                            ("day", pa.string())])
-        return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, table_type), format = 'csv', partitioning = ['home_team', 'away_team', 'year', 'day'], schema=schema)
     else:
-        schema = pa.schema([("game_str", pa.string()),
-                            ("play_id", pa.string()),
-                            ("timestamp", pa.float32()),
-                            ("player_position", pa.string()),
-                            ("field_x", pa.float32()),
-                            ("field_y", pa.float32()),
-                            ("home_team", pa.string()),
-                            ("away_team", pa.string()),
-                            ("year", pa.string()),
-                            ("day", pa.string())])
-        return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, table_type), format = 'csv', partitioning = ['home_team', 'away_team', 'year', 'day'], schema=schema)
+        return pads.dataset(source = os.path.join(os.path.dirname(__name__), data_path, table_type), format = 'csv', partitioning = ['home_team', 'away_team', 'year', 'day'])
 
 
 # Create a new table in your persistent DuckDB
