@@ -51,7 +51,7 @@ the database, your query performance should be lightning fast!
 
 # For the data_path argument, include the full file path to the folder that holds the data!
 # The schema is set for every table (other than rosters) to prevent mismatched type issues within columns
-def readDataSubset(table_type, data_path="/Users/gaberiedel/baseball_projects/SMT-Data-Challenge-2025-Updated"):
+def readDataSubset(table_type, data_path="C:\\Users\\username\\file-path\\SMT-Data-Challenge-2025-Updated"):
     if table_type not in ['ball_pos', 'game_events', 'game_info', 'player_pos', 'rosters']:
         #print("Invalid data subset name. Please try again with a valid data subset.")
         return -1
