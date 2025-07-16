@@ -1,38 +1,22 @@
-import os
 from fastapi import APIRouter, Response, HTTPException
-import base64
+from backend.animation.Animation import plot_animation
+import duckdb as db
+import pandas as pd
 
 router = APIRouter()
 
-@router.get("/api/pitch_agg_stats", tags=["agg_stats"])
-def get_pitch_scout_stats(team_name: str, pitcher: str):
-    if not pitcher or not team_name:
-        raise HTTPException(status_code=400, detail="Missing pitcher or team parameter")
-    
-    team_df = cache.get_team_data(team_name)
-
+@router.get("/api/play_animation", tags=["visuals"])
+def get_play_animation():
     try:
-        stats = agg_stats.pitcher_agg_stats(pitcher, team_df)
+        df_pick = pd.read_csv("../../database/pickoff_plays.csv")
+        random_row = df_pick.sample(n=1)
+        with db.connect("smt_2025.db") as con:
+                print(random_row["game_str"])
+                player_position_df = con.sql(f"""SELECT * FROM player_pos  
+                                                WHERE game_str = {random_row["game_str"].astype(str)};""").df()
+                ball_position_df = con.sql(f"""SELECT * FROM ball_pos  
+                                                WHERE game_str = {random_row["game_str"]};""").df()
+                plot_animation(player_position_df, ball_position_df, random_row["play_id"], False)
         return {"pitcher": pitcher, "stats": stats}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error generating stats: {str(e)}")
-
-@router.get("/api/team_names", tags=["roster"])
-def get_all_team_names():
-    try:
-        df = cache.get_all_team_names()
-        team_data = df.to_dict(orient="records")  # List of row-wise dicts
-        return {"teams": team_data}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching team names: {str(e)}")
-
-@router.get("/api/pitcher_names", tags=["roster"])
-def get_pitcher_names(team_name: str):
-    if not team_name:
-        raise HTTPException(status_code=400, detail="Missing team_name parameter")
-    
-    try:
-        pitcher_names = cache.get_pitcher_names(team_name)
-        return {"pitcher_names": pitcher_names.tolist()}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching pitcher names: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
