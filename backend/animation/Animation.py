@@ -1,4 +1,6 @@
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 from sportypy.surfaces import MiLBField
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
@@ -84,9 +86,8 @@ def plot_animation(player_position_df: pd.DataFrame,
                                                         merged_df['timestamp'].max(), num=50), blit=True)
 
     if save_gif:
-        print("HEELO")
         game_str = player_position_df['game_str'].iloc[0]
-        filepath = f'backend/app/static/{game_str}-{play_id}-.gif'
+        filepath = f'app/static/{game_str}-{play_id}-.gif'
         ani.save(filepath, writer=PillowWriter(fps=60))
     
     return HTML(ani.to_jshtml())
