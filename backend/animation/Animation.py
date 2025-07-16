@@ -1,7 +1,7 @@
 import pandas as pd
 from sportypy.surfaces import MiLBField
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 from IPython.display import HTML
 
@@ -9,6 +9,7 @@ def plot_animation(player_position_df: pd.DataFrame,
                    ball_position_df: pd.DataFrame, 
                    play_id: int = 1, 
                    save_gif: bool = False) -> HTML:
+    print("OK")
     
     """
     A function that plots field animations for a particular instance of a game.
@@ -85,7 +86,7 @@ def plot_animation(player_position_df: pd.DataFrame,
     if save_gif:
         print("HEELO")
         game_str = player_position_df['game_str'].iloc[0]
-        filepath = f'../app/static/{game_str}-{play_id}-.gif'
-        ani.save(filepath, writer='imagemagick', fps=60)
+        filepath = f'backend/app/static/{game_str}-{play_id}-.gif'
+        ani.save(filepath, writer=PillowWriter(fps=60))
     
     return HTML(ani.to_jshtml())

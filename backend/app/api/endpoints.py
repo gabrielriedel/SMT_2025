@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Response, HTTPException
-from animation.Animation import plot_animation
 from app.utils import viz
 import duckdb as db
 import pandas as pd
@@ -10,8 +9,11 @@ router = APIRouter()
 def get_play_animation():
     try:
         df_pick = pd.read_csv("../../database/pickoff_plays.csv")
-        viz.random_play(df_pick)
-        
-        return {"pitcher": "hello"}
+        print(df_pick)
+        game_play = viz.random_play(df_pick)
+        print(game_play[0])
+        print(game_play[1])
+        return {"game_str": game_play[0],
+                "play_id": game_play[1]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")

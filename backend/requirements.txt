@@ -104,7 +104,6 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 py4j==0.10.9.7
 pyarrow==19.0.0
-PyAthena==3.12.2
 pybaseball==2.2.7
 pycparser==2.22
 pydantic==2.11.3
@@ -126,8 +125,6 @@ requests==2.32.3
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 rpds-py==0.22.3
-s3fs==2025.2.0
-s3transfer==0.11.4
 scipy==1.15.2
 seaborn==0.13.2
 Send2Trash==1.8.3
