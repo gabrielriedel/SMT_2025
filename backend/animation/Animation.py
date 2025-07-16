@@ -83,6 +83,9 @@ def plot_animation(player_position_df: pd.DataFrame,
                                                         merged_df['timestamp'].max(), num=50), blit=True)
 
     if save_gif:
-        ani.save('animation.gif', writer='imagemagick', fps=60)
+        print("HEELO")
+        game_str = player_position_df['game_str'].iloc[0]
+        filepath = f'../app/static/{game_str}-{play_id}-.gif'
+        ani.save(filepath, writer='imagemagick', fps=60)
     
     return HTML(ani.to_jshtml())
