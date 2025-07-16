@@ -1,4 +1,4 @@
-from backend.animation.Animation import plot_animation
+from animation.Animation import plot_animation
 import duckdb as db 
 
 def random_play(df):
