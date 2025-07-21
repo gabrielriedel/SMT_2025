@@ -16,4 +16,4 @@ app.include_router(api_router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the API!", "endpoints": ["/activities", "/activity/{activity_id}"]}
+    return {"message": "Welcome to the SMT 2025 API!"}

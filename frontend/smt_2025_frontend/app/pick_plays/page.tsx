@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function ActivitiesGridPage() {
   const [loading, setLoading] = useState(false);
+  
 
   return (
     <div className="p-6 bg-white min-h-screen">
@@ -11,6 +12,7 @@ export default function ActivitiesGridPage() {
         Pickoff Plays Visualized
       </h1>
       <div className="flex justify-center mt-6">
+        <img src="https://smt-2025.onrender.com/gif" alt="GIF" />
         </div>
 
     </div>

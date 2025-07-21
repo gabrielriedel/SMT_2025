@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter
 import numpy as np
 from IPython.display import HTML
+import io
+import os
+import tempfile
 
 def plot_animation(player_position_df: pd.DataFrame, 
                    ball_position_df: pd.DataFrame, 
@@ -86,8 +89,13 @@ def plot_animation(player_position_df: pd.DataFrame,
                                                         merged_df['timestamp'].max(), num=50), blit=True)
 
     if save_gif:
-        game_str = player_position_df['game_str'].iloc[0]
-        filepath = f'app/static/{game_str}-{play_id}-.gif'
-        ani.save(filepath, writer=PillowWriter(fps=60))
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".gif") as temp_file:
+            ani.save(temp_file.name, writer=PillowWriter(fps=30))
+            temp_file.seek(0)
+            buf = io.BytesIO(temp_file.read())
+        os.remove(temp_file.name)
+
+        # game_str = player_position_df['game_str'].iloc[0]
+        # filepath = f'app/static/{game_str}-{play_id}.gif'
     
-    return HTML(ani.to_jshtml())
+    return buf
