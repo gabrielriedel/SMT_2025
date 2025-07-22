@@ -18,8 +18,8 @@ def get_play_animation():
 @router.get("/api/debug_file")
 def debug_file():
     try:
-        path = "database/smt_2025.db"
-        exists = os.path.exists(path)
+        DB_PATH = "/mnt/data/smt_2025.db" if os.path.exists("/mnt/data/smt_2025.db") else "database/smt_2025.db"
+        exists = os.path.exists(DB_PATH)
         return {"exists": exists, "cwd": os.getcwd()}
     except Exception as e:
         return {"error": str(e)}
