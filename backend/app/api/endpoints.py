@@ -18,7 +18,7 @@ def get_play_animation():
 @router.get("/api/debug_file")
 def debug_file():
     try:
-        path = "database/pickoff_plays.csv"
+        path = "database/smt_2025.db"
         exists = os.path.exists(path)
         return {"exists": exists, "cwd": os.getcwd()}
     except Exception as e:
