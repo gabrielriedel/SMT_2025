@@ -5,7 +5,7 @@ export default function GifDisplay() {
   const [gifUrl, setGifUrl] = useState("");
 
   useEffect(() => {
-    fetch("https://your-api.onrender.com/api/play_animation")
+    fetch("https://smt-2025.onrender.com/api/play_animation")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch gif");
         return res.blob();
