@@ -6,11 +6,20 @@ import os
 
 router = APIRouter()
 
-@router.get("/api/play_animation", tags=["visuals"])
+@router.get("/api/pick_animation", tags=["visuals"])
 def get_play_animation():
     try:
         df_pick = pd.read_csv("database/pickoff_plays.csv")
         buf = viz.random_play(df_pick)
+
+        return Response(content=buf.read(), media_type="image/gif")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
+@router.get("/api/steal_animation", tags=["visuals"])
+def get_play_animation():
+    try:
+        df_steal = pd.read_csv("database/steal_plays.csv")
+        buf = viz.random_play(df_steal)
 
         return Response(content=buf.read(), media_type="image/gif")
     except Exception as e:
