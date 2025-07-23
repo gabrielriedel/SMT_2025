@@ -1,20 +1,14 @@
 import pandas as pd
-import matplotlib
-matplotlib.use('Agg')
 from sportypy.surfaces import MiLBField
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FuncAnimation
 import numpy as np
 from IPython.display import HTML
-import io
-import os
-import tempfile
 
 def plot_animation(player_position_df: pd.DataFrame, 
                    ball_position_df: pd.DataFrame, 
                    play_id: int = 1, 
                    save_gif: bool = False) -> HTML:
-    print("OK")
     
     """
     A function that plots field animations for a particular instance of a game.
@@ -48,7 +42,7 @@ def plot_animation(player_position_df: pd.DataFrame,
     player_pos = player_position_df.query(f'play_id == {play_id}')
     ball_pos = ball_position_df.query(f'play_id == {play_id}')
     
-    merged_df = pd.merge(player_pos, ball_pos, on = ['timestamp', 'play_id', 'game_str'], how = 'inner')
+    merged_df = pd.merge(player_pos, ball_pos, on = ['timestamp', 'play_id', 'game_str'], how = 'outer')
     merged_df = merged_df[merged_df['player_position'] < 14] # Elminate umpires and coaches on field
     
     field = MiLBField()
@@ -89,13 +83,6 @@ def plot_animation(player_position_df: pd.DataFrame,
                                                         merged_df['timestamp'].max(), num=50), blit=True)
 
     if save_gif:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".gif") as temp_file:
-            ani.save(temp_file.name, writer=PillowWriter(fps=30))
-            temp_file.seek(0)
-            buf = io.BytesIO(temp_file.read())
-        os.remove(temp_file.name)
-
-        # game_str = player_position_df['game_str'].iloc[0]
-        # filepath = f'app/static/{game_str}-{play_id}.gif'
+        ani.save('animation.gif', writer='imagemagick', fps=10)
     
-    return buf
+    return HTML(ani.to_jshtml())
