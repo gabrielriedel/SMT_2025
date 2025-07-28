@@ -7,7 +7,7 @@ export default function GifDisplay() {
 
   const handleSubmit = () => {
     setLoading(true);
-    fetch("https://smt-2025.onrender.com/api/pick_animation").then((res) => {
+    fetch("https://smt-2025.onrender.com/api/out_animation").then((res) => {
         if (!res.ok) throw new Error("Failed to fetch gif");
         return res.blob();
       }).then((blob) => {
@@ -24,7 +24,7 @@ export default function GifDisplay() {
   return (
     <main className="flex flex-col px-6 py-10 max-w-6xl mx-auto gap-8">
       <h1 className="text-3xl font-bold text-center text-green-800">
-        Random Pickoff Play Generator
+        Random Out Recorded Play Generator
       </h1>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -36,11 +36,12 @@ export default function GifDisplay() {
           </section>
           <section className="bg-white border-l-4 border-green-600 shadow-md p-6 rounded-lg w-full">
             <p className="text-gray-700 text-lg">
-              The main model uses whether or not a play was a pickoff 
-              to first as the indicator variable, so it is integral to the system that I identify pickoffs 
-              correctly. This visualization serves as an eye test to verify the assumptions used to determine 
-              which plays could be classified as pickoffs.
-              Click to generate an animation of a play from the dataset of plays deemed as pickoffs to first.
+              The main model of the scouting report incorporates the number of outs in the inning. In 
+              order to do that we have to find plays where outs are recorded. This visualization serves 
+              as an eye test to verify the assumptions used to determine which plays could be classified
+              as plays with outs recorded.
+
+            Click to generate an animation of a play from the dataset of plays deemed as "out plays".
             </p>
           </section>
 
@@ -54,7 +55,7 @@ export default function GifDisplay() {
         <div className="flex-1 flex flex-col items-center gap-4">
           <button onClick={handleSubmit} 
           className="py-2 px-6 bg-green-600 text-white font-semibold text-lg rounded-full shadow-md hover:bg-green-700 transition duration-200">
-            Generate Pickoff Play
+            Generate Out Play
           </button>
 
           <div className="bg-green-100 border border-green-400 p-4 rounded-lg shadow-inner w-full max-w-xl text-center">
@@ -64,7 +65,7 @@ export default function GifDisplay() {
               <img src={gifUrl} alt="Generated Pickoff Play Animation" className="rounded-md"/>
             ) : (
               <p className="text-green-800">
-                Click the button to generate an animation of a pickoff to first base.
+                Click the button to generate an animation of a play where an out was recorded.
               </p>
             )}
           </div>

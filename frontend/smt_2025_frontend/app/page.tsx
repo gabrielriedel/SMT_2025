@@ -14,6 +14,11 @@ export default function Home() {
             <h2 className="text-lg font-bold text-green-800 mb-4">Menu</h2>
             <div className="flex flex-col gap-3">
               <Link 
+                href="/scouting_report"
+                className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
+                Scouting Report
+              </Link>
+              <Link 
                 href="/pick_plays"
                 className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
                 Pickoff Plays Visualized
@@ -24,9 +29,14 @@ export default function Home() {
                 Stealing Plays Visualized
               </Link>
               <Link 
-                href="/scouting_report"
+                href="/run_plays"
                 className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
-                Scouting Report
+                Run Scoring Plays Visualized
+              </Link>
+              <Link 
+                href="/out_plays"
+                className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
+                Out Recorded Plays Visualized
               </Link>
             </div>
           </section>

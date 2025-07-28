@@ -27,7 +27,17 @@ def get_play_animation():
 @router.get("/api/run_animation", tags=["visuals"])
 def get_play_animation():
     try:
-        df_steal = pd.read_csv("database/runs.csv")
+        df_steal = pd.read_csv("database/run_plays.csv")
+        buf = viz.random_play(df_steal)
+
+        return Response(content=buf.read(), media_type="image/gif")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
+    
+@router.get("/api/out_animation", tags=["visuals"])
+def get_play_animation():
+    try:
+        df_steal = pd.read_csv("database/out_plays.csv")
         buf = viz.random_play(df_steal)
 
         return Response(content=buf.read(), media_type="image/gif")

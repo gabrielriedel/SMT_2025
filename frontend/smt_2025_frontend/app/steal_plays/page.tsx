@@ -7,20 +7,16 @@ export default function GifDisplay() {
 
   const handleSubmit = () => {
     setLoading(true);
-    fetch("https://smt-2025.onrender.com/api/steal_animation")
-      .then((res) => {
+    fetch("https://smt-2025.onrender.com/api/steal_animation").then((res) => {
         if (!res.ok) throw new Error("Failed to fetch gif");
         return res.blob();
-      })
-      .then((blob) => {
+      }).then((blob) => {
         const url = URL.createObjectURL(blob);
         setGifUrl(url);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.error("Error loading gif:", err);
         alert("Failed to load animation. Please try again.");
-      })
-      .finally(() => {
+      }).finally(() => {
         setLoading(false);
       });
   };
@@ -56,12 +52,9 @@ export default function GifDisplay() {
           </section>
         </div>
 
-        {/* Button and GIF display on the right */}
         <div className="flex-1 flex flex-col items-center gap-4">
-          <button
-            onClick={handleSubmit}
-            className="py-2 px-6 bg-green-600 text-white font-semibold text-lg rounded-full shadow-md hover:bg-green-700 transition duration-200"
-          >
+          <button onClick={handleSubmit} 
+          className="py-2 px-6 bg-green-600 text-white font-semibold text-lg rounded-full shadow-md hover:bg-green-700 transition duration-200">
             Generate Steal Play
           </button>
 
@@ -69,14 +62,10 @@ export default function GifDisplay() {
             {loading ? (
               <p className="text-green-800 font-medium">Generating play...</p>
             ) : gifUrl ? (
-              <img
-                src={gifUrl}
-                alt="Generated Pickoff Play Animation"
-                className="rounded-md"
-              />
+              <img src={gifUrl} alt="Generated Steal Play Animation" className="rounded-md"/>
             ) : (
               <p className="text-green-800">
-                Click the button to generate a steal play animation.
+                Click the button to generate an animation of a play where a steal occurred.
               </p>
             )}
           </div>
@@ -85,6 +74,3 @@ export default function GifDisplay() {
     </main>
   );
 }
-
-
- 
