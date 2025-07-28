@@ -14,7 +14,6 @@ def plot_animation(player_position_df: pd.DataFrame,
                    ball_position_df: pd.DataFrame, 
                    play_id: int = 1, 
                    save_gif: bool = False) -> HTML:
-    print("OK")
     
     """
     A function that plots field animations for a particular instance of a game.
@@ -52,7 +51,7 @@ def plot_animation(player_position_df: pd.DataFrame,
     merged_df = merged_df[merged_df['player_position'] < 14] # Elminate umpires and coaches on field
     
     field = MiLBField()
-    field.draw(display_range='full')
+    field.draw(display_range='infield')
 
     fig = plt.gcf()
     ax = plt.gca()
