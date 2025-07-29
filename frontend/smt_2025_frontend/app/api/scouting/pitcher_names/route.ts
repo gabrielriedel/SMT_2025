@@ -14,9 +14,9 @@ export async function GET(request: NextRequest) {
   try {
     const upstreamUrl = `https://smt-2025.onrender.com/api/pitcher_names?team=${encodeURIComponent(team)}`;
     const res = await fetch(upstreamUrl);
-    const data = await res.text();
+    const data = await res.json();
 
-    return new Response(data, {
+    return new Response(JSON.stringify(data), {
       status: res.status,
       headers: {
         'Content-Type': res.headers.get('content-type') || 'application/json',

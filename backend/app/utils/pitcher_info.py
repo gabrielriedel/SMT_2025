@@ -1,6 +1,7 @@
 import duckdb as db 
 import pandas as pd
 import os
+import numpy as np
 
 
 DB_PATH = "/var/data/smt_2025.db" if os.path.exists("/var/data/smt_2025.db") else "database/smt_2025.db"
@@ -10,7 +11,24 @@ def get_pitchers(team: str):
         team_pitcher_df = con.sql(f"""SELECT DISTINCT pitcher 
                                         FROM game_info  
                                         WHERE CONTAINS (pitcher, '{team}');""").df()
-        return team_pitcher_df["pitcher"]
+        df_pitcher_hand = con.sql("""WITH rp AS 
+                            (SELECT * FROM
+                            (SELECT ball_position_x, play_id, game_str,
+                            DENSE_RANK() OVER (PARTITION BY game_str, play_id ORDER BY timestamp) AS rank
+                            FROM ball_pos bp) AS subquery
+                            WHERE rank = 1), 
+
+                            pitcher_rp AS (
+                            SELECT rp.game_str, rp.ball_position_x, pitcher 
+                            FROM rp
+                            LEFT JOIN game_info gi
+                            ON rp.game_str = gi.game_str AND rp.play_id = gi.play_per_game)
+                            
+                            SELECT AVG(ball_position_x) avg_rel_point, pitcher FROM pitcher_rp
+                            GROUP BY pitcher;""").df()
+        df_pitcher_hand["pitcher_hand"] = np.where(df_pitcher_hand["avg_rel_point"] > 0, "Left", "Right")
+        team_pitcher_df = pd.merge(team_pitcher_df, df_pitcher_hand, on="pitcher", how="left")
+        return team_pitcher_df
     
 def get_pitcher_counts(pitcher: str):
     df_pitchers = get_all_pitcher_data()

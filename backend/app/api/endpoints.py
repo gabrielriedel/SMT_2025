@@ -45,8 +45,8 @@ def get_out_animation():
 @router.get("/api/pitcher_names", tags=["scouting"])
 def get_pitchers_by_team(team: str):
     try:
-        pitchers = pi.get_pitchers(team).tolist()
-        return {"pitchers": pitchers}
+        df_pitcher_info = pi.get_pitchers(team)
+        return {"pitchers": df_pitcher_info[["pitcher", "pitcher_hand"]].to_dict(orient="records")}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching pitcher names: {str(e)}")
     
