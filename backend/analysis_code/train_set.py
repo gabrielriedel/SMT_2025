@@ -269,7 +269,7 @@ class TrainSet:
 
             X = df_model_data[['lead_distance', 'pitcher_hand', 
                                     'batter_hand', 'steal_score', 'is_home',
-                                    'run_diff'
+                                    'run_diff', 'outs'
                                     ]]
             y = df_model_data[["pickoff"]]
 

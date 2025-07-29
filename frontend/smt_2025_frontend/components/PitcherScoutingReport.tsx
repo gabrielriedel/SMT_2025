@@ -104,7 +104,12 @@ export default function PitcherScoutingReport() {
         <div className="flex-1 flex flex-col gap-4">
           <section className="bg-white border-l-4 border-blue-600 shadow-md p-6 rounded-lg w-full">
             <p className="text-gray-700 text-lg font-bold">Pitch Mix</p>
-            <p className="text-gray-600 text-sm">Fastball: 55% | Slider: 25% | Changeup: 20%</p>
+            {selectedPitcher && (
+                <img
+                    src={`https://smt-2025.onrender.com/api/pitcher_graphs?pitcher=${encodeURIComponent(selectedPitcher)}`}
+                    alt="Pickoff Histogram"
+                    className="rounded shadow-md"
+                />)}
           </section>
           <section className="bg-white border-l-4 border-blue-600 shadow-md p-6 rounded-lg w-full">
             <p className="text-gray-700 text-lg font-bold">Scouting Notes</p>

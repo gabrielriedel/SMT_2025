@@ -1,5 +1,3 @@
-// app/api/scouting/pitcher_names/route.ts
-
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {

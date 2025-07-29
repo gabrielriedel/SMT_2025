@@ -1,13 +1,11 @@
 from fastapi import APIRouter, Response, HTTPException
-from app.utils import viz, pitcher_info
-import duckdb as db
+from app.utils import viz, pitcher_info as pi
 import pandas as pd
-import os
 
 router = APIRouter()
 
 @router.get("/api/pick_animation", tags=["visuals"])
-def get_play_animation():
+def get_pick_animation():
     try:
         df_pick = pd.read_csv("database/pickoff_plays.csv")
         buf = viz.random_play(df_pick)
@@ -16,7 +14,7 @@ def get_play_animation():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
 @router.get("/api/steal_animation", tags=["visuals"])
-def get_play_animation():
+def get_steal_animation():
     try:
         df_steal = pd.read_csv("database/steal_plays.csv")
         buf = viz.random_play(df_steal)
@@ -25,7 +23,7 @@ def get_play_animation():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
 @router.get("/api/run_animation", tags=["visuals"])
-def get_play_animation():
+def get_run_animation():
     try:
         df_steal = pd.read_csv("database/run_plays.csv")
         buf = viz.random_play(df_steal)
@@ -35,7 +33,7 @@ def get_play_animation():
         raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
     
 @router.get("/api/out_animation", tags=["visuals"])
-def get_play_animation():
+def get_out_animation():
     try:
         df_steal = pd.read_csv("database/out_plays.csv")
         buf = viz.random_play(df_steal)
@@ -47,9 +45,48 @@ def get_play_animation():
 @router.get("/api/pitcher_names", tags=["scouting"])
 def get_pitchers_by_team(team: str):
     try:
-        pitchers = pitcher_info.get_pitchers(team).tolist()
+        pitchers = pi.get_pitchers(team).tolist()
         return {"pitchers": pitchers}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching pitcher names: {str(e)}")
+    
+@router.get("/api/pickoff_hist", tags=["scouting"])
+def get_pickoff_graphs(pitcher: str):
+    try:
+        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitchers = pi.get_all_pitcher_data()
+        pick_buf = viz.get_pickoff_counts_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        return Response(content=pick_buf.getvalue(), media_type="image/png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
+@router.get("/api/pitch_hist", tags=["scouting"])
+def get_pickoff_graphs(pitcher: str):
+    try:
+        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitchers = pi.get_all_pitcher_data()
+        pick_buf = viz.get_pitch_counts_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        return Response(content=pick_buf.getvalue(), media_type="image/png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
+
+@router.get("/api/games_hist", tags=["scouting"])
+def get_pickoff_graphs(pitcher: str):
+    try:
+        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitchers = pi.get_all_pitcher_data()
+        pick_buf = viz.get_games_played_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        return Response(content=pick_buf.getvalue(), media_type="image/png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
+    
+@router.get("/api/ppg_hist", tags=["scouting"])
+def get_pickoff_graphs(pitcher: str):
+    try:
+        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitchers = pi.get_all_pitcher_data()
+        pick_buf = viz.get_ppg_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        return Response(content=pick_buf.getvalue(), media_type="image/png")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
 
         
