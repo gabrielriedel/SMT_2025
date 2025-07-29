@@ -29,7 +29,7 @@ export default function PitcherScoutingReport() {
       try {
         const res = await fetch(`/api/scouting/pitcher_names?team=${encodeURIComponent(selectedTeam)}`);
         const data = await res.json();
-        setPitchers(data.pitcher_names || []);
+        setPitchers(data.pitchers || []);
         setSelectedPitcher('');
         console.log("Team selected:", selectedTeam);
       } catch (err) {
