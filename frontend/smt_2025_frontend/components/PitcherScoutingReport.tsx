@@ -106,7 +106,7 @@ export default function PitcherScoutingReport() {
             <p className="text-gray-700 text-lg font-bold">Pitch Mix</p>
             {selectedPitcher && (
                 <img
-                    src={`https://smt-2025.onrender.com/api/pitcher_graphs?pitcher=${encodeURIComponent(selectedPitcher)}`}
+                    src={`https://smt-2025.onrender.com/api/pickoff_hist?pitcher=${encodeURIComponent(selectedPitcher)}`}
                     alt="Pickoff Histogram"
                     className="rounded shadow-md"
                 />)}
