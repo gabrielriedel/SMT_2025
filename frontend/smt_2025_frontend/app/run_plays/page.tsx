@@ -41,7 +41,7 @@ export default function GifDisplay() {
               serves as an eye test to verify the assumptions used to determine which plays could be classified 
               as run scoring plays.
 
-            Click to generate an animation of a play from the dataset of plays deemed as "run scoring".
+            Click to generate an animation of a play from the dataset of plays deemed as run scoring.
             </p>
           </section>
 

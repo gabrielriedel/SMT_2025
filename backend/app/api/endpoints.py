@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Response, HTTPException
-from app.utils import viz
+from app.utils import viz, pitcher_info
 import duckdb as db
 import pandas as pd
 import os
@@ -43,3 +43,13 @@ def get_play_animation():
         return Response(content=buf.read(), media_type="image/gif")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating play: {str(e)}")
+    
+@router.get("/api/pitcher_names", tags=["scouting"])
+def get_pitchers_by_team(team: str):
+    try:
+        pitchers = pitcher_info.get_pitchers(team).tolist()
+        return {"pitchers": pitchers}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching pitcher names: {str(e)}")
+
+        

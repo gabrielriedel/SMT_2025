@@ -3,9 +3,9 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import *
 
-class train_set:
+class TrainSet:
 
-    def find_model_data():
+    def find_model_data(self):
         """
         A function that engineers features and creates a training dataset for the pickoff 
         likelihood model. 
@@ -158,7 +158,8 @@ class train_set:
                             
                             SELECT AVG(ball_position_x) avg_rel_point, pitcher FROM pitcher_rp
                             GROUP BY pitcher;""").df()
-            df_pitcher_hand["pitcher_hand"] = np.where(df_pitcher_hand["avg_rel_point"] > 0, "L", "R")
+            # Categorize lefties with a '1' and righties with a '0'
+            df_pitcher_hand["pitcher_hand"] = np.where(df_pitcher_hand["avg_rel_point"] > 0, 1, 0)
             df_model_data = pd.merge(df_model_data, df_pitcher_hand, on="pitcher", how="left")
 
             # Batter handedness: using the side of the y-axis to determine what box the hitter stands in
@@ -178,8 +179,9 @@ class train_set:
                                 
                             SELECT AVG(field_x) avg_stance, batter FROM batter_rp
                             GROUP BY batter""").df()
-        
-            df_batter_hand["batter_hand"] = np.where(df_batter_hand["avg_stance"] > 0, "L", "R")
+            
+            # Categorize lefties with a '1' and righties with a '0'
+            df_batter_hand["batter_hand"] = np.where(df_batter_hand["avg_stance"] > 0, 1, 0)
             df_model_data = pd.merge(df_model_data, df_batter_hand, on="batter", how="left")
 
             # Find the runs scored on each play and then calculate the current score/run differential of each game
@@ -273,8 +275,8 @@ class train_set:
 
             return X, y
 
-    def split_model_data(val_prop: int, test_prop: int):
-            X, y = train_set.find_model_data()
+    def split_model_data(self, val_prop: int, test_prop: int):
+            X, y = self.find_model_data()
 
             X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=test_prop, stratify=y, random_state=1313)
 
@@ -283,8 +285,5 @@ class train_set:
             X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=new_val_prop, stratify=y_train_val, random_state=42)
 
             return {"X": [X_train, X_val, X_test],
-                    "y": [y_train, y_val, y_test]}
-
-            
-                    
-    split_model_data(.1, .1)
+                    "y": [y_train, y_val, y_test]}  
+                

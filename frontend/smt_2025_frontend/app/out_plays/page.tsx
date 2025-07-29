@@ -41,7 +41,7 @@ export default function GifDisplay() {
               as an eye test to verify the assumptions used to determine which plays could be classified
               as plays with outs recorded.
 
-            Click to generate an animation of a play from the dataset of plays deemed as "out plays".
+            Click to generate an animation of a play from the dataset of plays deemed as out plays.
             </p>
           </section>
 
