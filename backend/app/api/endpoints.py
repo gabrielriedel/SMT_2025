@@ -67,38 +67,38 @@ def get_data_by_pitcher(pitcher: str):
 @router.get("/api/pickoff_hist", tags=["scouting"])
 def get_pickoff_graphs(pitcher: str):
     try:
-        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitcher_counts = pi.get_pitcher_data(pitcher)
         df_pitchers = pi.get_all_pitcher_data()
         pick_buf = viz.get_pickoff_counts_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
         return Response(content=pick_buf.getvalue(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
 @router.get("/api/pitch_hist", tags=["scouting"])
-def get_pickoff_graphs(pitcher: str):
+def get_pitch_graphs(pitcher: str):
     try:
-        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitcher_counts = pi.get_pitcher_data(pitcher)
         df_pitchers = pi.get_all_pitcher_data()
-        pick_buf = viz.get_pitch_counts_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        pick_buf = viz.get_pitch_counts_hist(df_pitchers, df_pitcher_counts["pitches"], pitcher)
         return Response(content=pick_buf.getvalue(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
 
 @router.get("/api/games_hist", tags=["scouting"])
-def get_pickoff_graphs(pitcher: str):
+def get_games_graphs(pitcher: str):
     try:
-        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitcher_counts = pi.get_pitcher_data(pitcher)
         df_pitchers = pi.get_all_pitcher_data()
-        pick_buf = viz.get_games_played_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        pick_buf = viz.get_games_played_hist(df_pitchers, df_pitcher_counts["games_played"], pitcher)
         return Response(content=pick_buf.getvalue(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
     
 @router.get("/api/ppg_hist", tags=["scouting"])
-def get_pickoff_graphs(pitcher: str):
+def get_ppg_graphs(pitcher: str):
     try:
-        df_pitcher_counts = pi.get_pitcher_counts(pitcher)
+        df_pitcher_counts = pi.get_pitcher_data(pitcher)
         df_pitchers = pi.get_all_pitcher_data()
-        pick_buf = viz.get_ppg_hist(df_pitchers, df_pitcher_counts["pickoffs"], pitcher)
+        pick_buf = viz.get_ppg_hist(df_pitchers, df_pitcher_counts["picks_per_game"], pitcher)
         return Response(content=pick_buf.getvalue(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")

@@ -80,6 +80,7 @@ def get_games_played_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
         return buf
 
 def get_ppg_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
+        print(count)
         binwidth = 0.2
         df_pitchers['bin'] = (df_pitchers['picks_per_game'] // binwidth) * binwidth
         target_bin = (count // binwidth) * binwidth

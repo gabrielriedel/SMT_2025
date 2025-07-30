@@ -11,6 +11,10 @@ def get_pitchers(team: str):
         team_pitcher_df = con.sql(f"""SELECT DISTINCT pitcher 
                                         FROM game_info  
                                         WHERE CONTAINS (pitcher, '{team}');""").df()
+        df_games_played = con.sql("""SELECT COUNT(DISTINCT game_str) AS games_played, pitcher
+                                  FROM game_info
+                                  GROUP BY pitcher
+                                  ORDER BY COUNT(*) DESC;""").df()
         df_pitcher_hand = con.sql("""WITH rp AS 
                             (SELECT * FROM
                             (SELECT ball_position_x, play_id, game_str,
@@ -28,6 +32,8 @@ def get_pitchers(team: str):
                             GROUP BY pitcher;""").df()
         df_pitcher_hand["pitcher_hand"] = np.where(df_pitcher_hand["avg_rel_point"] > 0, "Left", "Right")
         team_pitcher_df = pd.merge(team_pitcher_df, df_pitcher_hand, on="pitcher", how="left")
+        team_pitcher_df = pd.merge(team_pitcher_df, df_games_played, on="pitcher", how="left")
+        team_pitcher_df = team_pitcher_df[team_pitcher_df["games_played"] > 1]
         return team_pitcher_df
     
 def get_pitcher_data(pitcher: str):
@@ -57,7 +63,7 @@ def get_all_pitcher_data():
     df_pitchers = pd.merge(df_pitchers, df_games_played, on="pitcher", how = "left")
     df_pitchers["pickoffs"] = df_pitchers["pickoffs"].fillna(0)
     df_pitchers = df_pitchers[df_pitchers["games_played"] > 1]
-    df_pitchers["picks_per_game"] = df_pitchers["pickoffs"]/df_pitchers["games_played"]
+    df_pitchers["picks_per_game"] = df_pitchers["pickoffs"]/df_pitchers["games_played"].astype(float)
 
     return df_pitchers
 
@@ -67,4 +73,4 @@ def get_stat_percentile(pitcher: str, stat_type: str):
     stat = df_pitcher_data[f"{stat_type}"].iloc[0]
     ranks = df_all_pitcher_data[f"{stat_type}"].rank(pct=True)
     percentile = np.round(ranks[df_all_pitcher_data[f"{stat_type}"] == stat].iloc[0] * 100,0)
-    return stat, percentile
+    return float(np.round(stat,2)), int(percentile)
