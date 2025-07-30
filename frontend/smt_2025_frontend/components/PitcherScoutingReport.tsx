@@ -6,11 +6,23 @@ export default function PitcherScoutingReport() {
         pitcher: string;
         pitcher_hand: string;
     };
+
+    type PitcherData = {
+      pickoffs: number;
+      pick_per: number;
+      pitches: number;
+      pitch_per: number;
+      games: number;
+      games_per: number;
+      ppg: number;
+      ppg_per: number;
+    }
     const [modelOutput, setModelOutput] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
     const [pitchers, setPitchers] = useState<Pitcher[]>([]);
     const [selectedPitcher, setSelectedPitcher] = useState<Pitcher | null>(null);
+    const [pitcherData, setPitcherData] = useState<PitcherData | null>(null);
     const teams = ['QEA', 'RZQ', 'YJD'];
 
     const handleRunModel = () => {
@@ -46,7 +58,36 @@ export default function PitcherScoutingReport() {
   useEffect(() => {
     if (selectedTeam && selectedPitcher) {
       console.log("Selected pitcher:", selectedPitcher, "from team:", selectedTeam);
+
     }
+  }, [selectedPitcher]);
+
+  useEffect(() => {
+    if (!selectedPitcher) return;
+
+    const fetchPitcherData = async () => {
+      try {
+        const res = await fetch(
+          `https://smt-2025.onrender.com/api/pitcher_data?pitcher=${encodeURIComponent(selectedPitcher.pitcher)}`
+        );
+        const data = await res.json();
+
+        setPitcherData({
+          pickoffs: data.pickoffs[0],
+          pick_per: data.pickoffs[1],
+          pitches: data.pitches[0],
+          pitch_per: data.pitches[1],
+          games: data.games[0],
+          games_per: data.games[1],
+          ppg: data.ppg[0],
+          ppg_per: data.ppg[1],
+        });
+      } catch (err) {
+        console.error("Failed to fetch pitcher data:", err);
+      }
+    };
+
+    fetchPitcherData();
   }, [selectedPitcher]);
 
   return (
@@ -120,6 +161,10 @@ export default function PitcherScoutingReport() {
                 src={`https://smt-2025.onrender.com/api/pickoff_hist?pitcher=${encodeURIComponent(selectedPitcher.pitcher)}`}
                 alt="Pickoff Histogram"
                 className="rounded shadow-md"/>)}
+            {pitcherData && (
+            <p className="text-sm text-gray-600 mt-2">
+              {pitcherData.pickoffs} pickoffs — {pitcherData.pick_per.toFixed(1)} percentile
+            </p>)}
         </section>
 
         <section className="bg-white border-l-4 border-blue-600 shadow-md p-4 rounded-lg">
@@ -129,6 +174,10 @@ export default function PitcherScoutingReport() {
                 src={`https://smt-2025.onrender.com/api/pitch_hist?pitcher=${encodeURIComponent(selectedPitcher.pitcher)}`}
                 alt="Pitch Count Histogram"
                 className="rounded shadow-md"/>)}
+            {pitcherData && (
+            <p className="text-sm text-gray-600 mt-2">
+              {pitcherData.pitches} pitches — {pitcherData.pitch_per.toFixed(1)} percentile
+            </p>)}
         </section>
 
         <section className="bg-white border-l-4 border-blue-600 shadow-md p-4 rounded-lg">
@@ -138,6 +187,10 @@ export default function PitcherScoutingReport() {
                 src={`https://smt-2025.onrender.com/api/games_hist?pitcher=${encodeURIComponent(selectedPitcher.pitcher)}`}
                 alt="Games Played Histogram"
                 className="rounded shadow-md"/>)}
+            {pitcherData && (
+            <p className="text-sm text-gray-600 mt-2">
+              {pitcherData.games} games played — {pitcherData.games_per.toFixed(1)} percentile
+            </p>)}
         </section>
 
         <section className="bg-white border-l-4 border-blue-600 shadow-md p-4 rounded-lg">
@@ -147,6 +200,10 @@ export default function PitcherScoutingReport() {
                 src={`https://smt-2025.onrender.com/api/ppg_hist?pitcher=${encodeURIComponent(selectedPitcher.pitcher)}`}
                 alt="PPG Histogram"
                 className="rounded shadow-md"/>)}
+            {pitcherData && (
+            <p className="text-sm text-gray-600 mt-2">
+              {pitcherData.ppg} pickoffs per game — {pitcherData.ppg_per.toFixed(1)} percentile
+            </p>)}
         </section>
         </div>
         </div>

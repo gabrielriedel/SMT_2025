@@ -50,6 +50,20 @@ def get_pitchers_by_team(team: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching pitcher names: {str(e)}")
     
+@router.get("/api/pitcher_data", tags=["scouting"])
+def get_data_by_pitcher(pitcher: str):
+    try:
+        pickoffs, pick_per = pi.get_stat_percentile(pitcher, "pickoffs")
+        pitches, pitch_per = pi.get_stat_percentile(pitcher, "pitches")
+        games, games_per = pi.get_stat_percentile(pitcher, "games_played")
+        ppg, ppg_per = pi.get_stat_percentile(pitcher, "picks_per_game")
+        return {"pickoffs": [pickoffs, pick_per],
+                "pitches": [pitches, pitch_per],
+                "games": [games, games_per],
+                "ppg": [ppg, ppg_per]}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching pitcher stats: {str(e)}")
+    
 @router.get("/api/pickoff_hist", tags=["scouting"])
 def get_pickoff_graphs(pitcher: str):
     try:

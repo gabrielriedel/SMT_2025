@@ -30,7 +30,7 @@ def get_pitchers(team: str):
         team_pitcher_df = pd.merge(team_pitcher_df, df_pitcher_hand, on="pitcher", how="left")
         return team_pitcher_df
     
-def get_pitcher_counts(pitcher: str):
+def get_pitcher_data(pitcher: str):
     df_pitchers = get_all_pitcher_data()
     return df_pitchers[df_pitchers["pitcher"] == pitcher]
 
@@ -60,3 +60,11 @@ def get_all_pitcher_data():
     df_pitchers["picks_per_game"] = df_pitchers["pickoffs"]/df_pitchers["games_played"]
 
     return df_pitchers
+
+def get_stat_percentile(pitcher: str, stat_type: str):
+    df_pitcher_data = get_pitcher_data(pitcher)
+    df_all_pitcher_data = get_all_pitcher_data()
+    stat = df_pitcher_data[f"{stat_type}"].iloc[0]
+    ranks = df_all_pitcher_data[f"{stat_type}"].rank(pct=True)
+    percentile = np.round(ranks[df_all_pitcher_data[f"{stat_type}"] == stat].iloc[0] * 100,0)
+    return stat, percentile
