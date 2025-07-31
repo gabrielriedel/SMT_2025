@@ -6,72 +6,75 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, classification_report, precision_recall_curve
-import numpy as np
-import bambi as bmb
-import pandas as pd
-import arviz as az
+import joblib
 
 class Model:
 
     def logistic_regression_model(split_data):
+        # Unpack the data
         X_train, X_val, X_test = split_data["X"]
         y_train, y_val, y_test = split_data["y"]
 
-        # Create a pipeline: scaling + logistic regression
+        # Define the pipeline
         pipeline = Pipeline([
             ("scaler", StandardScaler()),
-            ("logit", LogisticRegression(class_weight="balanced"))
+            ("logit", LogisticRegression(max_iter=1000))
         ])
 
-        # Fit the model
-        pipeline.fit(X_train, y_train)
+        # Define hyperparameter grid
+        param_grid = {
+            "logit__C": [0.01, 0.1, 1, 10, 100],
+            "logit__solver": ["liblinear", "saga"],
+            "logit__penalty": ["l1", "l2"]
+        }
+
+        # Grid search with 5-fold cross-validation using F1 as scoring
+        grid = GridSearchCV(
+            estimator=pipeline,
+            param_grid=param_grid,
+            scoring="f1",
+            cv=5,
+            n_jobs=-1,
+            verbose=0
+        )
+
+        # Fit the model on training data
+        grid.fit(X_train, y_train)
+        best_model = grid.best_estimator_
 
         # Predict probabilities on validation set
-        val_probs = pipeline.predict_proba(X_val)[:, 1]
+        val_probs = best_model.predict_proba(X_val)[:, 1]
 
-        # Find best threshold using F1 score
+        # Tune threshold using F1 score
         precisions, recalls, thresholds = precision_recall_curve(y_val, val_probs)
         f1_scores = 2 * (precisions * recalls) / (precisions + recalls + 1e-10)
         best_idx = f1_scores.argmax()
         best_threshold = thresholds[best_idx]
 
-        print(f"Best threshold (validation): {best_threshold:.3f}")
-        
+        # Apply best threshold to validation set (for inspection)
         val_preds = (val_probs >= best_threshold).astype(int)
-        print("Unique predictions:", np.unique(val_preds, return_counts=True))
 
-        # Validation metrics
-        auc = roc_auc_score(y_val, val_probs)
-        acc = accuracy_score(y_val, val_preds)
-        precision = precision_score(y_val, val_preds)
-        recall = recall_score(y_val, val_preds)
-        f1 = f1_score(y_val, val_preds)
-
-        print(f"\n[Validation Metrics]")
-        print(f"AUC:       {auc:.3f}")
-        print(f"Accuracy:  {acc:.3f}")
-        print(f"Precision: {precision:.3f}")
-        print(f"Recall:    {recall:.3f}")
-        print(f"F1 Score:  {f1:.3f}")
-
-        # Test evaluation
-        test_probs = pipeline.predict_proba(X_test)[:, 1]
+        # Evaluate on test set using best threshold
+        test_probs = best_model.predict_proba(X_test)[:, 1]
         test_preds = (test_probs >= best_threshold).astype(int)
 
-        test_auc = roc_auc_score(y_test, test_probs)
-        test_acc = accuracy_score(y_test, test_preds)
-        test_precision = precision_score(y_test, test_preds)
-        test_recall = recall_score(y_test, test_preds)
-        test_f1 = f1_score(y_test, test_preds)
+        # Compute test metrics
+        test_metrics = {
+            "AUC": round(roc_auc_score(y_test, test_probs), 3),
+            "Accuracy": round(accuracy_score(y_test, test_preds), 3),
+            "Precision": round(precision_score(y_test, test_preds), 3),
+            "Recall": round(recall_score(y_test, test_preds), 3),
+            "F1": round(f1_score(y_test, test_preds), 3),
+            "Best Threshold": round(best_threshold, 3),
+            "Best Params": grid.best_params_
+        }
 
-        print(f"\n[Test Metrics]")
-        print(f"AUC:       {test_auc:.3f}")
-        print(f"Accuracy:  {test_acc:.3f}")
-        print(f"Precision: {test_precision:.3f}")
-        print(f"Recall:    {test_recall:.3f}")
-        print(f"F1 Score:  {test_f1:.3f}")
+        print(confusion_matrix(y_test, test_preds, labels=None, sample_weight=None, normalize=None))
+        print(test_metrics)
 
-        return pipeline, best_threshold
+        joblib.dump(best_model, 'logit_model.pkl')
+
+        return best_model, test_metrics
     
     def random_forest_model(split_data):
         X_train, X_val, X_test = split_data["X"]
@@ -266,4 +269,4 @@ class Model:
 
 train_set = TrainSet()
 split_data = train_set.split_model_data(val_prop=0.1, test_prop=0.2)
-Model.xg_boost_model(split_data)
+Model.logistic_regression_model(split_data)

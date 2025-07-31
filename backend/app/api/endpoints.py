@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Response, HTTPException
 from app.utils import viz, pitcher_info as pi
 import pandas as pd
+import joblib
+import joblib
 
 router = APIRouter()
 
@@ -102,5 +104,18 @@ def get_ppg_graphs(pitcher: str):
         return Response(content=pick_buf.getvalue(), media_type="image/png")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching plots: {str(e)}")
+    
+@router.get("/api/run_model", tags=["modeling"])
+def run_model(outs: int, runs: int, pitcher_hand: int, batter_hand: int, base_dist: float, steal_score: float, home_team: int):
+    try:
+        columns = ['outs', 'run_diff', 'pitcher_hand', 'batter_hand', 'lead_distance', 'steal_score', 'is_home']
+        model = joblib.load("database/rf_model.pkl")
+        x_vals = [[outs, runs, pitcher_hand, batter_hand, base_dist, steal_score, home_team]]
+        X = pd.DataFrame(x_vals, columns=columns)
+        pred = model.predict_proba(X)[:, 1]
+        return {"prediction": pred.tolist()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error running model: {str(e)}")
+
 
         

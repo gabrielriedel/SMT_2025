@@ -266,10 +266,10 @@ class TrainSet:
 
             # Remove rows with any NA values
             df_model_data = df_model_data.dropna()
+            df_model_data.to_csv("model_dataset.csv")
 
-            X = df_model_data[['lead_distance', 'pitcher_hand', 
-                                    'batter_hand', 'steal_score', 'is_home',
-                                    'run_diff', 'outs'
+            X = df_model_data[['outs','run_diff', 'pitcher_hand', 
+                                    'batter_hand', 'lead_distance', 'steal_score', 'is_home'
                                     ]]
             y = df_model_data[["pickoff"]]
 
@@ -280,10 +280,10 @@ class TrainSet:
 
             X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, test_size=test_prop, stratify=y, random_state=1313)
 
-            new_val_prop = X.shape[0] * val_prop/X_train_val.shape[0]
+            new_val_prop = val_prop / (1 - test_prop)
+            print("new_val", new_val_prop)
 
             X_train, X_val, y_train, y_val = train_test_split(X_train_val, y_train_val, test_size=new_val_prop, stratify=y_train_val, random_state=42)
 
             return {"X": [X_train, X_val, X_test],
-                    "y": [y_train, y_val, y_test]}  
-                
+                    "y": [y_train, y_val, y_test]} 
