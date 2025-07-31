@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response, HTTPException
 from app.utils import viz, pitcher_info as pi
 import pandas as pd
 import joblib
-import joblib
+import numpy as np
 
 router = APIRouter()
 
@@ -113,7 +113,7 @@ def run_model(outs: int, runs: int, pitcher_hand: int, batter_hand: int, base_di
         x_vals = [[outs, runs, pitcher_hand, batter_hand, base_dist, steal_score, home_team]]
         X = pd.DataFrame(x_vals, columns=columns)
         pred = model.predict_proba(X)[:, 1]
-        return {"prediction": pred.tolist()}
+        return {"prediction": float(np.round(pred[0],4))}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error running model: {str(e)}")
 

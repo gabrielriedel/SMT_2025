@@ -60,7 +60,7 @@ export default function PitcherScoutingReport() {
 
         try {
               setLoading(true);
-              const res = await fetch(`https://smt-2025.onrender.com/api/run_pitcher_model?outs=${encodeURIComponent(formData.outs)}
+              const res = await fetch(`https://smt-2025.onrender.com/api/run_model?outs=${encodeURIComponent(formData.outs)}
                                           &runs=${encodeURIComponent(formData.runs)}
                                           &pitcher_hand=${encodeURIComponent(formData.pitcher_hand)}
                                           &batter_hand=${encodeURIComponent(formData.batter_hand)}
@@ -254,15 +254,15 @@ export default function PitcherScoutingReport() {
       onSubmit={handleSubmit}
       className="animate-in grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-white shadow-lg rounded-lg p-4 w-full max-w-5xl">
       <div>
-        <label htmlFor="outs" className="text-sm font-medium block mb-1">Number of Outs:</label>
+        <label htmlFor="outs" className="text-sm text-blue-900 font-medium block mb-1">Number of Outs:</label>
         <select
           id="outs"
           name="outs"
           value={formData.outs}
           onChange={handleChange}
           required
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"
-        >
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="">Select Outs</option>
           <option value="0">0</option>
           <option value="1">1</option>
           <option value="2">2</option>
@@ -270,75 +270,78 @@ export default function PitcherScoutingReport() {
       </div>
 
       <div>
-        <label htmlFor="runs" className="text-sm font-medium block mb-1">Number of Runs:</label>
+        <label htmlFor="runs" className="text-sm text-blue-900 font-medium block mb-1">Run Differential:</label>
         <input
           type="text"
           id="runs"
           name="runs"
           value={formData.runs}
           onChange={handleChange}
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
       </div>
 
       <div>
-        <label htmlFor="pitcher_hand" className="text-sm font-medium block mb-1">Pitcher Handedness:</label>
+        <label htmlFor="pitcher_hand" className="text-sm text-blue-900 font-medium block mb-1">Pitcher Handedness:</label>
         <select
           id="pitcher_hand"
           name="pitcher_hand"
           value={formData.pitcher_hand}
           onChange={handleChange}
           required
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="">Select Handedness</option>
           <option value="0">Right</option>
           <option value="1">Left</option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="batter_hand" className="text-sm font-medium block mb-1">Batter Handedness:</label>
+        <label htmlFor="batter_hand" className="text-sm text-blue-900 font-medium block mb-1">Batter Handedness:</label>
         <select
           id="batter_hand"
           name="batter_hand"
           value={formData.batter_hand}
           onChange={handleChange}
           required
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="">Select Handedness</option>
           <option value="0">Right</option>
           <option value="1">Left</option>
         </select>
       </div>
 
       <div>
-        <label htmlFor="base_dist" className="text-sm font-medium block mb-1">Leadoff Distance:</label>
+        <label htmlFor="base_dist" className="text-sm text-blue-900 font-medium block mb-1">Leadoff Distance:</label>
         <input
           type="text"
           id="base_dist"
           name="base_dist"
           value={formData.base_dist}
           onChange={handleChange}
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
       </div>
 
       <div>
-        <label htmlFor="steal_score" className="text-sm font-medium block mb-1">Steal Score:</label>
+        <label htmlFor="steal_score" className="text-sm text-blue-900 font-medium block mb-1">Steal Score:</label>
         <input
           type="text"
           id="steal_score"
           name="steal_score"
           value={formData.steal_score}
           onChange={handleChange}
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50"/>
       </div>
 
       <div>
-        <label htmlFor="home_team" className="text-sm font-medium block mb-1">Home or Away:</label>
+        <label htmlFor="home_team" className="text-sm text-blue-900 font-medium block mb-1">Home or Away:</label>
         <select
           id="home_team"
           name="home_team"
           value={formData.home_team}
           onChange={handleChange}
           required
-          className="rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
+          <option value="">Select Home or Away</option>
           <option value="1">Home</option>
           <option value="0">Away</option>
         </select>

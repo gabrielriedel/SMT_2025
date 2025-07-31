@@ -5,7 +5,7 @@ from sklearn.model_selection import *
 
 class TrainSet:
 
-    def find_model_data(self):
+    def find_model_data():
         """
         A function that engineers features and creates a training dataset for the pickoff 
         likelihood model. 
@@ -88,7 +88,9 @@ class TrainSet:
             df_thieves = pd.merge(df_runners, steal_count, on="player_name", how="left").fillna(0).sort_values(by="stolen_bases", ascending=False)
 
             # Calculate a "steal_score" that rewards stolen base attempts and penalizes the more often a runner is on first base  
-            df_thieves["steal_score"] = (df_thieves["stolen_bases"]/df_thieves["count_on_first"] * np.log(df_thieves["stolen_bases"])).fillna(0)
+            df_thieves["steal_score_initial"] = (df_thieves["stolen_bases"]/df_thieves["count_on_first"] * np.log(df_thieves["stolen_bases"])).fillna(0)
+            mean_score = df_thieves[df_thieves["steal_score_initial"] != 0]["steal_score_initial"].mean()
+            df_thieves["steal_score"] = df_thieves["steal_score_initial"] / mean_score * 100
 
             # Find pickoff plays with a runner on first base
             df_pickoff_plays = con.sql("""
@@ -287,3 +289,5 @@ class TrainSet:
 
             return {"X": [X_train, X_val, X_test],
                     "y": [y_train, y_val, y_test]} 
+
+TrainSet.find_model_data()
