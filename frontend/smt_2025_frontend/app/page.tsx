@@ -46,18 +46,21 @@ export default function Home() {
           <div className="text-green-900 flex flex-col gap-3">
             This application is a scouting report aimed to unveil the 
             tendency of a pitcher to attempt a pickoff at first base.
-            You are able to select one of the three main teams in our dataset (QEA, RZQ, and YJD)
-            and a pitcher who has played in more than one game in our data. Then, dynamically generated
-            statistics on that pitcher's pickoff proclivity and game experience will pop up along with
-            an interactive model. This model allows you to input game state information, and it will respond
-            with the probability of a pitcher picking off under those conditions.
+            You are able to select one of the three main teams in our 
+            dataset (QEA, RZQ, and YJD) and a pitcher who has played 
+            in more than one game in our data. Then, dynamically generated
+            statistics on the pickoff proclivity and game experience 
+            of the pitcher will pop up along with an interactive model. 
+            This model allows you to input game state information, and 
+            it will respond with the probability of a pitcher picking 
+            off under those conditions.
           </div>
           <div className="text-green-900 flex flex-col gap-3">
-
-            In order to generate the graphs and model in the scouting report, 
-            I made inferences about various play types in the data. The
-            other tabs provide visualizations of the plays I deemed as pickoff, stealing,
-            run scoring, and out plays. Watch them to assess the validity of my assumptions!
+            In order to generate the graphs and model in the scouting 
+            report, I made inferences about various play types in the 
+            data. The other tabs provide visualizations of the plays 
+            I deemed as pickoff, stealing, run scoring, and out plays. 
+            Watch them to assess the validity of my assumptions!
           </div>
         </section>
       </main>
