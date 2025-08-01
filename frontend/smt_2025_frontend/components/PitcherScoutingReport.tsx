@@ -263,9 +263,9 @@ export default function PitcherScoutingReport() {
           required
           className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
           <option value="">Select Outs</option>
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
+          <option value={0}>0</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
         </select>
       </div>
 
@@ -290,8 +290,8 @@ export default function PitcherScoutingReport() {
           required
           className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
           <option value="">Select Handedness</option>
-          <option value="0">Right</option>
-          <option value="1">Left</option>
+          <option value={0}>Right</option>
+          <option value={1}>Left</option>
         </select>
       </div>
 
@@ -305,8 +305,8 @@ export default function PitcherScoutingReport() {
           required
           className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
           <option value="">Select Handedness</option>
-          <option value="0">Right</option>
-          <option value="1">Left</option>
+          <option value={0}>Right</option>
+          <option value={1}>Left</option>
         </select>
       </div>
 
@@ -342,8 +342,8 @@ export default function PitcherScoutingReport() {
           required
           className="text-blue-900 rounded-md px-3 py-1 w-full bg-gray-50 border border-gray-300 focus:border-blue-500 focus:ring-blue-500 focus:ring-opacity-50">
           <option value="">Select Home or Away</option>
-          <option value="1">Home</option>
-          <option value="0">Away</option>
+          <option value={1}>Home</option>
+          <option value={0}>Away</option>
         </select>
       </div>
 
