@@ -235,7 +235,9 @@ class TrainSet:
                                     (SELECT *, 
                                     LAG(first_baserunner) OVER (PARTITION BY game_str, top_bottom_inning ORDER BY play_per_game) AS next_first,
                                     LAG(second_baserunner) OVER (PARTITION BY game_str, top_bottom_inning ORDER BY play_per_game) AS next_second,
-                                    LAG(third_baserunner) OVER (PARTITION BY game_str, top_bottom_inning ORDER BY play_per_game) AS next_third
+                                    LAG(third_baserunner) OVER (PARTITION BY game_str, top_bottom_inning ORDER BY play_per_game) AS next_third,
+                                    LAG(batter) OVER (PARTITION BY game_str, top_bottom_inning ORDER BY play_per_game) AS next_batter,
+                              
                                     FROM game_info)
 
                                     SELECT DISTINCT game_str, play_per_game, SUM(out) as outs
@@ -257,6 +259,13 @@ class TrainSet:
                                     SELECT game_str, top_bottom_inning, play_per_game, 
                                     CASE 
                                         WHEN third_baserunner NOT IN (next_first, next_second, next_third) THEN 1 
+                                        ELSE 0
+                                        END AS out
+                                    FROM runner_info
+                                    UNION ALL
+                                    SELECT game_str, top_bottom_inning, play_per_game, 
+                                    CASE 
+                                        WHEN batter != next_batter THEN 1 
                                         ELSE 0
                                         END AS out
                                     FROM runner_info) subquery

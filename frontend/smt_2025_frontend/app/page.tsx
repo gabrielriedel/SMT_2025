@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from 'next/link'
 
 export default function Home() {
@@ -13,6 +12,11 @@ export default function Home() {
         <section className="bg-green-100 border border-green-400 p-4 rounded shadow-md w-64">
           <h2 className="text-lg font-bold text-green-800 mb-4">Menu</h2>
           <div className="flex flex-col gap-3">
+            <Link 
+              href="/about"
+              className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
+              About
+            </Link>
             <Link 
               href="/scouting_report"
               className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">

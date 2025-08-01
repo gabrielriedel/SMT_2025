@@ -72,5 +72,5 @@ def get_stat_percentile(pitcher: str, stat_type: str):
     df_all_pitcher_data = get_all_pitcher_data()
     stat = df_pitcher_data[f"{stat_type}"].iloc[0]
     ranks = df_all_pitcher_data[f"{stat_type}"].rank(pct=True)
-    percentile = np.round(ranks[df_all_pitcher_data[f"{stat_type}"] == stat].iloc[0] * 100,0)
-    return float(np.round(stat,2)), int(percentile)
+    percentile = round(ranks[df_all_pitcher_data[f"{stat_type}"] == stat].iloc[0] * 100,0)
+    return float(round(stat,2)), int(percentile)

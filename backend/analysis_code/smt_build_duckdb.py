@@ -45,7 +45,7 @@ not have issues loading the data into memory temporarily, but if you do, conside
 the data when creating the 'temp_df' variable (line 137). However, once the data is loaded in 
 the database, your query performance should be lightning fast!
 
-- Feel free to reach out to me on the discord @GabeRiedel with any questions, I am happy to help!
+- Feel free to reach out to me on the discord @-- with any questions, I am happy to help!
 
 """
 

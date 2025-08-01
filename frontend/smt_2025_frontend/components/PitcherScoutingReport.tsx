@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { FormEvent } from 'react'
 
 export default function PitcherScoutingReport() {
     type Pitcher = {
@@ -272,7 +271,7 @@ export default function PitcherScoutingReport() {
       <div>
         <label htmlFor="runs" className="text-sm text-blue-900 font-medium block mb-1">Run Differential:</label>
         <input
-          type="text"
+          type="number"
           id="runs"
           name="runs"
           value={formData.runs}
@@ -313,7 +312,7 @@ export default function PitcherScoutingReport() {
       <div>
         <label htmlFor="base_dist" className="text-sm text-blue-900 font-medium block mb-1">Leadoff Distance:</label>
         <input
-          type="text"
+          type="number"
           id="base_dist"
           name="base_dist"
           value={formData.base_dist}
@@ -324,7 +323,7 @@ export default function PitcherScoutingReport() {
       <div>
         <label htmlFor="steal_score" className="text-sm text-blue-900 font-medium block mb-1">Steal Score:</label>
         <input
-          type="text"
+          type="number"
           id="steal_score"
           name="steal_score"
           value={formData.steal_score}
