@@ -53,24 +53,47 @@ export default function Page() {
               alert('All fields are required!');
               return;
           }
+
+          const trimmedFormData = {
+            outs: Number(formData.outs),
+            runs: Number(formData.runs),
+            pitcher_hand: Number(formData.pitcher_hand),
+            batter_hand: Number(formData.batter_hand),
+            base_dist: Number(formData.base_dist),
+            steal_score: Number(formData.steal_score),
+            home_team: Number(formData.home_team),
+          };
+
+          console.log(trimmedFormData.outs, trimmedFormData.runs, trimmedFormData.pitcher_hand, trimmedFormData.batter_hand, trimmedFormData.base_dist, trimmedFormData.steal_score, trimmedFormData.home_team)
+
   
           try {
-                setLoading(true);
-                const res = await fetch(`https://smt-2025.onrender.com/api/run_model?outs=${encodeURIComponent(formData.outs)}
-                                            &runs=${encodeURIComponent(formData.runs)}
-                                            &pitcher_hand=${encodeURIComponent(formData.pitcher_hand)}
-                                            &batter_hand=${encodeURIComponent(formData.batter_hand)}
-                                            &base_dist=${encodeURIComponent(formData.base_dist)}
-                                            &steal_score=${encodeURIComponent(formData.steal_score)}
-                                            &home_team=${encodeURIComponent(formData.home_team)}`);
-                  const data = await res.json()
-                  setModelOutput(data.prediction);
-  
-                  setFormData({ outs: 0, runs: 0, pitcher_hand: '', batter_hand: '', base_dist: 0, steal_score: 0, home_team: ''}); 
+            setLoading(true);
+            const res = await fetch(`https://smt-2025.onrender.com/api/run_model?outs=${trimmedFormData.outs}
+              &runs=${trimmedFormData.runs}
+              &pitcher_hand=${trimmedFormData.pitcher_hand}
+              &batter_hand=${trimmedFormData.batter_hand}
+              &base_dist=${trimmedFormData.base_dist}
+              &steal_score=${trimmedFormData.steal_score}
+              &home_team=${trimmedFormData.home_team}`);
+            const data = await res.json();
+            setModelOutput(data.prediction);
+
+            setFormData({
+              outs: 0,
+              runs: 0,
+              pitcher_hand: '',
+              batter_hand: '',
+              base_dist: 0,
+              steal_score: 0,
+              home_team: '',
+            });
           } catch (error) {
-              alert(error instanceof Error ? error.message : 'Failed to run model');
+            alert(error instanceof Error ? error.message : 'Failed to run model');
+          } finally {
+            setLoading(false);
           }
-      };
+        };
   
     useEffect(() => {
       if (!selectedTeam) return;
@@ -131,9 +154,9 @@ export default function Page() {
     return (
       <main className="flex flex-col px-6 py-10 max-w-6xl mx-auto gap-8">
         <Link href="/"
-            className="text-blue-400 bg-blue-100 border border-blue-400 absolute left-10 top-10 py-4 px-8 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-lg">
-        Back to dashboard
-      </Link>
+            className="text-green-900 bg-blue-100 border border-green-400 absolute left-10 top-10 py-4 px-8 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-md text-blue-400">
+                Back to dashboard
+        </Link>
         <h1 className="text-3xl font-bold text-center text-blue-800">
           Pitcher Scouting Report
         </h1>
@@ -359,9 +382,9 @@ export default function Page() {
           <div className="bg-blue-100 border border-blue-400 p-4 rounded-lg shadow-inner w-full max-w-xl text-center">
             {loading ? (
               <p className="text-blue-800 font-medium">Running model...</p>) 
-              : modelOutput ? (<p className="text-blue-800 font-semibold">Model Output: {modelOutput}</p>) 
+              : modelOutput ? (<p className="text-blue-800 font-semibold">Pickoff Probability: {modelOutput}</p>) 
               : (
-              <p className="text-blue-800">Click the button to simulate an outcome based on pitcher profile.</p>)}
+              <p className="text-blue-800">Run the model to simulate the probability of a pickoff in a given scenario.</p>)}
           </div>
         </div>
       </main>

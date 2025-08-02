@@ -6,6 +6,11 @@ from plotnine import *
 from io import BytesIO
 
 def random_play(df):
+    """
+    A function that takes in a dataframe of plays, 
+    selects a random row, and produces an animated gif 
+    of that play (loaded into memory for ease of transportation)
+    """
     random_row = df.sample(n=1).reset_index(drop=True)
     DB_PATH = "/var/data/smt_2025.db" if os.path.exists("/var/data/smt_2025.db") else "database/smt_2025.db"
     with db.connect(DB_PATH) as con:
@@ -18,6 +23,11 @@ def random_play(df):
                     buf = plot_animation(player_position_df, ball_position_df, int(play_id), True)
                     return buf
 
+
+# The following functions utilize the plotnine package to bring in ggplot to produce 
+# visualizations for the scouting report. I like coding in python but prefer the ggplot
+# interface for desiging visuals.
+
 def get_pickoff_counts_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
         binwidth = 1
         df_pitchers['bin'] = (df_pitchers['pickoffs'] // binwidth) * binwidth
@@ -27,7 +37,7 @@ def get_pickoff_counts_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str)
 
         plot = ggplot(df_pitchers, aes(x='pickoffs', fill='highlight')) \
         + geom_histogram(binwidth=binwidth, color="black", boundary=0) \
-        + scale_fill_manual(values={True: "green", False: "black"},
+        + scale_fill_manual(values={True: "#00FF00", False: "black"},
             name='Pitcher Highlight',                  \
             labels=['Other', f'{pitcher}']) \
         + labs(title = "Number of Pickoffs by Each Pitcher (min. 2 games played)",
@@ -47,7 +57,7 @@ def get_pitch_counts_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
 
         plot = ggplot(df_pitchers, aes(x='pitches', fill='highlight')) \
         + geom_histogram(binwidth=binwidth, color="black", boundary=0) \
-        + scale_fill_manual(values={True: "green", False: "black"},
+        + scale_fill_manual(values={True: "#00FF00", False: "black"},
             name='Pitcher Highlight',                  \
             labels=['Other', f'{pitcher}']) \
         + labs(title = "Number of Pitches by Each Pitcher (min. 2 games played)",
@@ -67,7 +77,7 @@ def get_games_played_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
 
         plot = ggplot(df_pitchers, aes(x='games_played', fill='highlight')) \
         + geom_histogram(binwidth=binwidth, color="black", boundary=0) \
-        + scale_fill_manual(values={True: "green", False: "black"},
+        + scale_fill_manual(values={True: "#00FF00", False: "black"},
             name='Pitcher Highlight',                  \
             labels=['Other', f'{pitcher}']) \
         + labs(title = "Number of Games Played by Each Pitcher (min. 2 games played)",
@@ -87,7 +97,7 @@ def get_ppg_hist(df_pitchers: pd.DataFrame, count: int, pitcher: str):
         df_pitchers['highlight'] = df_pitchers['bin'] == target_bin.iloc[0]
         plot = ggplot(df_pitchers, aes(x='picks_per_game', fill='highlight')) \
         + geom_histogram(binwidth=binwidth, color="black", boundary=0) \
-        + scale_fill_manual(values={True: "green", False: "black"},
+        + scale_fill_manual(values={True: "#00FF00", False: "black"},
             name='Pitcher Highlight',                  \
             labels=['Other', f'{pitcher}']) \
         + labs(title = "Pickoffs per Game by Each Pitcher (min. 2 games played)",

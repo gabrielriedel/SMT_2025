@@ -13,11 +13,6 @@ export default function Home() {
           <h2 className="text-lg font-bold text-green-800 mb-4">Menu</h2>
           <div className="flex flex-col gap-3">
             <Link 
-              href="/about"
-              className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
-              About
-            </Link>
-            <Link 
               href="/scouting_report"
               className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
               Scouting Report
@@ -41,6 +36,11 @@ export default function Home() {
               href="/out_plays"
               className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
               Out Recorded Plays Visualized
+            </Link>
+            <Link 
+              href="/contact_info"
+              className="text-green-900 hover:text-white hover:bg-green-700 font-medium py-2 px-3 rounded transition-colors duration-200">
+              Contact Info
             </Link>
           </div>
         </section>
