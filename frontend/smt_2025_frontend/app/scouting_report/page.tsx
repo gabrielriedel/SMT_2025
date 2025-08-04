@@ -334,7 +334,7 @@ export default function Page() {
         </div>
   
         <div>
-          <label htmlFor="base_dist" className="text-sm text-blue-900 font-medium block mb-1">Leadoff Distance:</label>
+          <label htmlFor="base_dist" className="text-sm text-blue-900 font-medium block mb-1">Leadoff Distance (in feet):</label>
           <input
             type="number"
             id="base_dist"
@@ -345,7 +345,7 @@ export default function Page() {
         </div>
   
         <div>
-          <label htmlFor="steal_score" className="text-sm text-blue-900 font-medium block mb-1">Steal Score:</label>
+          <label htmlFor="steal_score" className="text-sm text-blue-900 font-medium block mb-1">Steal+ (average is 100):</label>
           <input
             type="number"
             id="steal_score"
